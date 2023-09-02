@@ -74,11 +74,12 @@ form{
     width: fit-content;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    
     
 }
 .wrapper-full{
     width: 90% !important;
+    justify-content: space-between;
     margin: 0 auto;
 }
 

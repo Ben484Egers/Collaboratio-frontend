@@ -62,7 +62,7 @@ function Projectform() {
             
         //Set user ID, in case of creation
             if(user) {
-                userId: user.id;
+                userId = user.id;
             }
         let payload: Project = {
             name: values.name,
