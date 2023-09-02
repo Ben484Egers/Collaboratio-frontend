@@ -1,0 +1,126 @@
+@media(max-width: 1200px) {
+
+    h1{
+        font-size: var(--text-size-2) !important;
+    }
+    h2{
+        font-size: var(--text-size-3) !important;
+    }
+    .branding{
+        font-size: var(--text-size-2);
+    }
+
+    .nav .list {
+        width: 60% !important;
+
+        li a{
+            font-size: var(--text-size-6);
+        }
+    }
+
+    .bg-box{
+        display: none;
+    }
+}
+
+
+@media(max-width: 1050px){
+    /* Navbar */
+    .nav{
+        .branding{
+            font-size: var(--text-size-4) !important;
+        }
+        .list{
+            position: absolute;
+            right: -15px;
+            width: 45% !important;
+            height: max-content;
+
+            ul {
+                flex-direction: column;
+                justify-content: space-between;
+                align-items: flex-start;
+                margin-top: 3.5rem;
+                width: 80%;
+                height: 100%;
+                border: 1px solid var(--main-color);
+                border-top: none;
+                border-radius: 0px 0px 10px 10px;
+                background: rgba(0, 0, 0, 0.8);
+
+                li{
+                    width: 100%;
+                    padding: 10px 0;
+                    border-bottom: 1px solid var(--main-color);
+                    a{
+                        color: var(--of-white) !important;
+                        font-size: 20px !important;
+                    }
+                }
+            }
+        }
+
+        .hide{
+            top: -30rem !important;
+        }
+
+        .menuI{
+            display: block !important;
+        }
+    }
+
+    //Promo item
+    .promo-text{
+        width: 55% !important;
+    }
+
+    //Doelen cards
+
+    .doelen-container{
+        .logo-bg{
+            height:150px;
+            width: 150px;
+            top: -8% !important;
+        }
+    }
+    
+
+}
+
+@media(max-width: 650px) {
+
+    
+body::-webkit-scrollbar{
+    display: none;
+}
+    
+
+    /* Nav */
+    .nav{
+        padding: 0;
+        .list{
+            width: 70% !important;
+        }
+    }
+
+    
+    .form-wrapper{
+        min-width: 320px;
+    }
+    .login-form{
+        width: 300px !important;
+    }
+
+    .cancel{
+        position: absolute;
+        top: 0;
+        right: 10px;
+    }
+    
+
+    .footer{
+        width: 100%;
+        padding: 1rem 2.2rem 0 0;
+
+    }
+}

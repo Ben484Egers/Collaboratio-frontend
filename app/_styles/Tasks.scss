@@ -1,0 +1,131 @@
+.task-container{
+    width: 100%;
+    margin-top: 1rem;
+
+    
+    .container{
+        display: flex;
+    }
+}
+.header{
+    margin-bottom: 1rem;
+}
+
+#tasks-container, #projects-container {
+    width: 100%;
+    padding: 1rem 10px;
+    margin-bottom: 2rem; 
+}
+
+#tasks-container{
+    border-bottom: 1px solid red;
+}
+
+
+#projects-container{
+    .header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .card-group{
+        // justify-content: space-evenly !important;
+        gap: 2rem;
+    }
+} 
+
+.card-group{
+    width: 100%;
+    /* display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+}
+
+.empty{
+    text-align: center;
+    margin-top: 5rem;
+    color: var(--green-1);
+}
+
+.card-body{
+    padding: 10px;
+    min-width: 350px;
+    border-radius: 2px;
+    background-color: var(--gray);
+    position: relative;
+
+    
+    .edit-icon{
+    position: absolute;
+    top: -20px;
+    right: 10px;
+    color: var(--main-color);
+    cursor: pointer;
+    }
+    .container{
+        width: 100%;
+        margin-bottom: 1rem;
+
+        .task-info{
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 5px 0;
+            gap: 1rem;
+
+            .heading{
+                flex: 1 80px;
+            }
+            .info{
+                flex: 3 150px;
+            }
+        }
+        
+        
+    }
+    
+    
+    
+}
+.project-body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    width: 400px;
+    min-width: 350px !important;
+    .img{
+        flex: 2;
+        height: 200px;
+        min-width: 50px;
+        
+
+        img{
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+    }
+    .details{
+        flex: 3;
+        min-width: 150px;
+        display: flex;
+        flex-wrap: wrap;
+
+        .project-info{
+            .heading{
+                font-weight: 700;
+            }
+            .info{
+                min-height: 1rem;
+            }
+        }
+    }
+}

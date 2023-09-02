@@ -1,0 +1,34 @@
+$pulseSize: 5em;
+$pulseTiming: 1.5s;
+
+.loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  background-color: rgba($color: #000000, $alpha: 0.6); 
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  z-index: 200;
+}
+
+.pulseLoader {
+  width: $pulseSize;
+  height: $pulseSize;
+  border-radius: $pulseSize;
+  background-color: var(--white);
+  outline: 1px solid transparent;
+  animation: pulseanim $pulseTiming ease-in-out infinite;
+}
+
+
+@keyframes pulseanim {
+
+  0% { transform: scale(0); opacity: 0.8;}
+  100% { transform: scale(1); opacity: 0.1;}
+}

@@ -1,0 +1,193 @@
+.form-wrapper{
+    height: max-content;
+    width: 40%;
+    min-width: 300px;
+    margin: 1rem auto;
+    padding: 2rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 5px 10px 15px rgba($color: #000000, $alpha: 0.3);
+
+    .heading{
+        width: max-content;
+        margin: 5px auto 10px;
+    }
+
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+
+    .form-control{
+        width: 90%;
+        margin: 0 auto;
+        label{
+            display: block;
+            font-size: var(--text-size-5);
+            font-weight: 500;
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+
+        input, textarea{
+            width: 100%;
+            border: 1px solid rgba($color: #000000, $alpha: 0.3);
+            border-radius: 4px;
+            padding: 5px;
+            outline: none;
+        }
+
+        textarea{
+            min-height: 100px;
+        }
+
+        input:focus{
+            border: 1px solid var(--secund-color);
+        }
+
+        p.form-error{
+            color: firebrick;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+    }
+
+    .checkbox-control{
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 1.5rem;
+
+        input{
+            width: fit-content !important;
+        }
+    }
+}
+
+.button-wrapper{
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+}
+.wrapper-full{
+    width: 90% !important;
+    margin: 0 auto;
+}
+
+.main-btn{
+    padding: 5px 3rem;
+    background-color: var(--secund-color);
+    color: var(--white);
+    font-size: var(--text-size-5);
+    cursor: pointer;
+}
+
+.secundary-btn{
+    padding: 5px 10px;
+    background-color: var(--main-color);
+    color: var(--white);
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 2px;
+}
+
+.add-btn{
+    border-radius: 20px;
+    padding: 8px 1rem;
+    background-color: var(--secund-color);
+    color: var(--white);
+    font-size: var(--text-size-5);
+    cursor: pointer;
+}
+
+
+.login-form{
+    width: 400px !important;
+}
+// Project form
+
+.dashboard {
+    position: relative
+}
+
+
+
+#project-form, #task-form{
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: rgba($color: #000000, $alpha: 0.75);
+    z-index: 100;
+
+    .form-wrapper{
+        position: fixed;
+        width: 40% !important;
+        height: 80vh;
+        top: 70px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 10px 15px;
+        background-color: var(--cart-bg);
+        z-index: 100;
+    
+    }
+
+    .container{
+        position: relative;
+
+    }
+}
+
+.cancel{
+    position: absolute;
+    right: -10px;
+    top: 10px;
+
+    .cancel-btn{
+        color: firebrick;
+        cursor: pointer;
+    }
+}
+
+
+//Searchbar styles
+.searchbar-container{
+    margin: 15px auto;
+    height: fit-content;
+    width: 60%;
+    min-width: 350px;
+    max-width: max-content;
+
+    form{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center; 
+        flex-wrap: wrap;
+        // width: 500px;
+        gap: 10px;
+
+
+        .form-control{
+            margin-left: 0;
+            width: 300px;
+
+            input:focus{
+                border: 1px solid var(--main-color);
+            }
+        }
+
+    }
+}
+
+

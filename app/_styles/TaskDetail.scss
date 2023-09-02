@@ -1,0 +1,38 @@
+.task-detail{
+    height: 100vh;
+    width: 100vw;
+    .container{
+        .go-back{
+            font-size: var(--text-size-4);
+            cursor: pointer;
+        }
+
+        .heading{
+            margin: 1rem 0;
+        }
+        .task-detail-body{
+            background-color: burlywood;
+            padding: 10px 1rem;
+            font-weight: bold;
+
+            .info-group{
+                .task-info{
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: center;
+                    margin-bottom: 5px;
+                    gap: 1rem;
+
+                    .heading{
+                        flex: 1 80px;
+                    }
+                    .info{
+                        flex: 3 150px;
+                    }
+
+                }
+            }
+            
+        }
+    }
+}
