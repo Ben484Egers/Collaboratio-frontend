@@ -48,7 +48,7 @@ export default function Loginform() {
             const response = await loginHandler(JSON.stringify(payLoad));
         } catch (e) {
             const error = e  as AxiosError;
-            alert(error.message);
+            alert(error);
         }
 
     },
