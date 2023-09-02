@@ -168,7 +168,7 @@ export default function AuthProvider({children}) {
     await axios.post(`${process.env.API_URL}api/logout`, null , {
       headers: headers}).then((response) => {
         setToken('undefined');
-        // localStorage.setItem("Collab-app", 'undefined');
+        localStorage.setItem("Collab-app", 'undefined');
         setLoggedIn(false);
       }).catch(error => {
         console.log(error.message);
