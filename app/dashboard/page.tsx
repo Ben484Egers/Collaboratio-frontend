@@ -6,6 +6,7 @@ import Projectform from '../_components/Projectform'
 import Taskform from '../_components/Taskform'
 import { Project } from '../_types/Project'
 import { Task } from '../_types/Task'
+import MiniLoader from '../_components/MiniLoader'
 
 import axios from 'axios'
 import {useContext, useEffect, useState } from 'react'
@@ -22,6 +23,7 @@ export default function dashboard() {
   const [projects, setProjects] = useState<Project[]>();
   const [tasks, setTasks] = useState<Task[]>();
   const [username, setUsername] = useState<string>(undefined);
+  const [miniLoader, setMiniLoader] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -75,17 +77,19 @@ export default function dashboard() {
   }, [user])
 
   const onRefresh = () => {
+    setMiniLoader(true);
     const tk = localStorage.getItem("Collab-app");
     let headers = {
-    'X-Requested-With': 'XMLHttpRequest',
-    'Content-type': 'application/json',
-    'Authorization': `Bearer ${tk}`
+      'X-Requested-With': 'XMLHttpRequest',
+      'Content-type': 'application/json',
+      'Authorization': `Bearer ${tk}`
     };
-
+    
     getTasksOfUser(headers);
     getProjects(headers);
     getUserInfo();
-
+    
+    setMiniLoader(false);
   }
 
 
@@ -97,6 +101,7 @@ export default function dashboard() {
 
   return (
     <main className='dashboard container'>
+      {miniLoader && <MiniLoader/>}
     <SearchBar searchHandler={handleSubmit}/>
       <div className="welcome">
       <h2>Welcome, {!username ? '' : username}</h2>

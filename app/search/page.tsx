@@ -9,6 +9,7 @@ import { AppContext } from '../_contexts/AppContext'
 import { Project } from '../_types/Project'
 import { Task } from '../_types/Task'
 import { AuthContext } from '../_contexts/AuthContext'
+import MiniLoader from '../_components/MiniLoader'
 
 export default function page() {
 
@@ -18,6 +19,8 @@ export default function page() {
     const [projects, setProjects] = useState<Project[]>();
     const [tasks, setTasks] = useState<Task[]>();
     const [filteredTerm, setFilteredTerm] = useState<string>();
+    const [miniLoader, setMiniLoader] = useState<boolean>(false);
+
 
     const router = useRouter();
   
@@ -84,12 +87,16 @@ export default function page() {
       }
 
       const onRefresh = () => {
+        setMiniLoader(true)
         fetchProjectsAndTasks(searchTerm)
+        setMiniLoader(false)
+
       }
 
 
   return (
     <main className='container'>
+      {miniLoader && <MiniLoader/>}
     <SearchBar searchHandler={handleSubmit}/>
     <div className="searchterm">
       <h5>Showing results for: "{filteredTerm}"</h5>

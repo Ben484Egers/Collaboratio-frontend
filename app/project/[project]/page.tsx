@@ -15,6 +15,7 @@ import { User } from '@/app/_types/User'
 import { Project } from '@/app/_types/Project'
 import { Task } from '@/app/_types/Task'
 import Link from 'next/link'
+import MiniLoader from '@/app/_components/MiniLoader'
 
 export default function page({params}) {
   const {setMiddleware} = useContext(AuthContext);
@@ -32,6 +33,7 @@ export default function page({params}) {
   const [completed, setCompleted] = useState<boolean>();
   const [dataComplete, setDataComplete] = useState<boolean>(false);
   const [error, setError] = useState<string>();
+  const [miniLoader, setMiniLoader] = useState<boolean>(false);
 
 
   const handleChange = (e) => {
@@ -152,12 +154,16 @@ const onRefresh = () => {
   'Content-type': 'application/json',
   'Authorization': `Bearer ${tk}`
   };
+  setMiniLoader(true)
   getTasksOfProject(project);
+  setMiniLoader(false)
+
 
 }
 
   return (
     <main className='project-detail'>
+      {miniLoader && <MiniLoader/>}
       <div className="container">
         <div className="go-back">
           <Link href={'/dashboard'}>Go to Dashboard</Link>

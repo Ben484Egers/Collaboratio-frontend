@@ -12,20 +12,20 @@ import DeleteButton from './DeleteButton';
 
 
 function Projectform() {
-    const {createProject, setShowProjectForm, sharedProject, setSharedProject, updateProject, deleteProject} = useContext(AppContext);
+    const {createProject, setShowProjectForm, sharedProject, setSharedProject, updateProject, deleteProject, user} = useContext(AppContext);
     const [miniLoading, setMiniLoading] = useState<boolean>(false);
 
     let name:string = ''
     let deadline:string = ''
     let details:string = ''
-    let user:number = 0
+    let userId:number = 0
     let completed
 
   if(sharedProject !== undefined) {
     name = sharedProject.name,
     deadline = sharedProject.deadline,
     details = sharedProject.description,
-    user = sharedProject.user_id,
+    userId = sharedProject.user_id,
     completed = sharedProject.completed
   }
   
@@ -36,7 +36,7 @@ function Projectform() {
         name: name,
         deadline: deadline,
         details: details,
-        user: user,
+        user: userId,
         resources: [],
         completed: completed,
     },
@@ -58,13 +58,17 @@ function Projectform() {
                 projectCompleted = false;
             } else{
                 projectCompleted = true;
-            } 
-
+            }
+            
+        //Set user ID, in case of creation
+            if(user) {
+                userId: user.id;
+            }
         let payload: Project = {
             name: values.name,
             deadline: values.deadline,
             description: values.details,
-            user_id: user,
+            user_id: userId,
             completed: projectCompleted
         }
         try {
