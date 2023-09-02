@@ -5,19 +5,12 @@ import AuthProvider from './_contexts/AuthContext';
 import Nav from './_components/Nav'
 import Footer from './_components/Footer'
 
-
-import type { Metadata } from 'next'
 import { Montserrat } from 'next/font/google'
 import AppProvider from './_contexts/AppContext';
 const montserrat = Montserrat({
   weight: ['400', '700'],
   subsets: ['latin']
 })
-
-export const metadata: Metadata = {
-  title: 'Collaboratio',
-  description: 'Collaboration made easy!',
-}
 
   
   export default function RootLayout({
