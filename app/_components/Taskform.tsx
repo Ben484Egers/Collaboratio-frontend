@@ -105,6 +105,12 @@ function Taskform({projectId}) {
         setShowTaskForm(false)
         setMiniLoading(false);
         return result;
+
+    }
+
+    const hideTaskForm = () => {
+        setShowTaskForm(false);
+        setSharedTask(undefined);
     }
 
   return (
@@ -112,7 +118,7 @@ function Taskform({projectId}) {
         <div className='form-wrapper'>
         {miniLoading && <MiniLoader/>}
         <div className="container">
-            <div className="cancel" onClick={ () => setShowTaskForm(false)}>
+            <div className="cancel" onClick={hideTaskForm}>
                 <FaTimesCircle size="2rem" className='cancel-btn'/>
             </div>
             <div className="heading">

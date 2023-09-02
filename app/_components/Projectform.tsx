@@ -12,7 +12,7 @@ import DeleteButton from './DeleteButton';
 
 
 function Projectform() {
-    const {createProject, setShowProjectForm, sharedProject, updateProject, deleteProject} = useContext(AppContext);
+    const {createProject, setShowProjectForm, sharedProject, setSharedProject, updateProject, deleteProject} = useContext(AppContext);
     const [miniLoading, setMiniLoading] = useState<boolean>(false);
 
     let name:string = ''
@@ -92,13 +92,18 @@ const deleteHandler = async() =>{
     return result;
 }
 
+const hideProjectform =() =>{
+    setShowProjectForm(false);
+    setSharedProject(undefined);
+}
+
 
   return (
     <div id="project-form">
         <div className="form-wrapper">
             {miniLoading && <MiniLoader/>}
         <div className="container">
-            <div className="cancel" onClick={ () => setShowProjectForm(false)}>
+            <div className="cancel" onClick={ hideProjectform}>
                 <FaTimesCircle size="2rem" className='cancel-btn'/>
             </div>
             <div className="heading">
