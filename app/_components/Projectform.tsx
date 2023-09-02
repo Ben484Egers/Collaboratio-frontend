@@ -54,7 +54,7 @@ function Projectform() {
 
         let projectCompleted: boolean
         //Check if project is completed
-            if(values.completed.length == 0 || values.completed == undefined) {
+            if(values.completed == undefined) {
                 projectCompleted = false;
             } else{
                 projectCompleted = true;
