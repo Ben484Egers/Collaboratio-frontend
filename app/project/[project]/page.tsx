@@ -19,16 +19,14 @@ import MiniLoader from '@/app/_components/MiniLoader'
 
 export default function page({params}) {
   const {setMiddleware} = useContext(AuthContext);
-  const {showTaskForm, setShowTaskForm, user} = useContext(AppContext);
+  const {showTaskForm, setShowTaskForm, user, users} = useContext(AppContext);
 
   
   const {project} = params;
   
-  const [users, setUsers] = useState<User[]>();
   const [projectData, setProjectData] = useState<Project>();
   const [tasks, setTasks] = useState<Task[]>();
   const [projectManager, setProjectManager] = useState<User>();
-  const [isOwner, setIsOwner] = useState<boolean>();
   const [resources, setResources] = useState('');
   const [completed, setCompleted] = useState<boolean>();
   const [dataComplete, setDataComplete] = useState<boolean>(false);
@@ -38,6 +36,31 @@ export default function page({params}) {
 
   const handleChange = (e) => {
     setCompleted(e.target.checked);
+  }
+
+  useEffect(() => {
+    setMiddleware('auth');
+    getSingleProject(project);
+    getTasksOfProject(project);
+  }, []);
+
+  
+  //Filter out project manager when users and projectdata are fetched.
+  useEffect(() => {
+    if(projectData && users){
+    getUserById(projectData.user_id)
+    }
+  }, [projectData, users]);
+
+  useEffect(() => {
+    setDataComplete(true);
+  }, [projectManager])
+
+
+  //Gets user by given id.
+  const getUserById = (id: number) => {
+    const ProjManager: User = users.find(user => user.id == id);
+    setProjectManager(ProjManager);
   }
 
   
@@ -83,65 +106,6 @@ export default function page({params}) {
     })
 
   }
-  
-
-  async function getProjectManager(userId: number) {
-    const tk = localStorage.getItem("Collab-app");
-
-    let headers = {
-      'X-Requested-With': 'XMLHttpRequest',
-      'Content-type': 'application/json',
-      'Authorization': `Bearer ${tk}`
-    };
-  
-    //Get projectmanager/user of project
-    axios.get(`${process.env.API_URL}api/users/${userId}`, {
-      headers: headers
-    }).then((response) => {
-      setProjectManager(response.data);
-      console.log(response.data);
-    }).catch(error => {
-      console.log(error)
-      setError(error);
-    })
-  }
-
-
-  // async function getUsers(userId: number) {
-  //   // setLoading(true)
-  //   const tk = localStorage.getItem("Collab-app");
-  //   let headers = {
-  //   'X-Requested-With': 'XMLHttpRequest',
-  //   'Content-type': 'application/json',
-  //   'Authorization': `Bearer ${tk}`
-  //   };
-  //   axios.get(`${process.env.API_URL}api/users`, {
-  //     headers: headers
-  //   }).then((response) => {
-  //     setUsers(response.data)
-  //     console.log(response.data)
-  //     setLoading(false)
-  // }).catch(error => {
-  //   console.log(error)
-  //     setError(error.message);
-  //     // setLoading(false)
-  // })
-
-  // }
-
-  useEffect(() => {
-    setMiddleware('auth');
-    getSingleProject(project);
-    getTasksOfProject(project);
-  }, []);
-
-  useEffect(() => {
-    if(!projectData){
-      return;
-    }
-    getProjectManager(projectData.user_id).then(() => setDataComplete(true));
-  }, [projectData]);
-
 
 const addTask = () => {
   setShowTaskForm(true)
@@ -174,13 +138,12 @@ const onRefresh = () => {
           <h3>Project:</h3>
           <h3>{projectData ? projectData.name : <Pulse/>}</h3>
           </div>
+          {(user && projectData) && (projectData.user_id == user.id) &&
             <div className="button-wrapper">
               <AddButton btnText={"Add Task +"} onClickHandler={addTask}/>
             </div>
-
+          }
         </div>
-
-
         <div className="project-details">
           <div className="project-image">
             <Image src={`/project${Math.floor(Math.random() * 3) + 1}.jpg`} 

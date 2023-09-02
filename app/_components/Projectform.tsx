@@ -152,22 +152,6 @@ const hideProjectform =() =>{
                     }
                 </div>
 
-                {/* <select onChange={formik.handleChange}
-                            value={formik.values.completed} id='users'>
-                    {users.map((user, index) => {
-                        return <option key={index}>
-                                    {user}
-                                </option>
-                    })}
-                </select> 
-                />
-                {(formik.touched.user && formik.errors.user) && 
-                    <p className='form-error'>
-                        {formik.errors.user}
-                    </p>
-                }
-                */}
-
                 <div className="form-control">
                     <label htmlFor="resources">Resources:</label>
                     <input id='resources' name='resources' type="file" className='resources-input' multiple onChange={formik.handleChange}

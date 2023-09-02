@@ -13,6 +13,7 @@
 @import './_styles/Utils.scss';
 @import './_styles/SkeletonPage.scss';
 @import './_styles/PagesStyling.scss';
+@import './_styles/Calendar.scss';
 
 *{
   margin: 0;
@@ -91,6 +92,7 @@ body{
     color: var(--main-color);
     font-size: var(--text-size-4-5);
     text-decoration: underline;
+    z-index: 200;
 }
 
 .btn-fixed{

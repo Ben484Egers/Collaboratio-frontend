@@ -9,11 +9,10 @@ import { AppContext } from '../_contexts/AppContext';
 import { FaEdit } from 'react-icons/fa';
 
 export default function Task(task) {
-    const {setError, user, setShowTaskForm, setSharedTask} = useContext(AppContext);
+    const {users, setError, user, setShowTaskForm, setSharedTask} = useContext(AppContext);
 
     const [AssignedBy, setAssignedBy] = useState<User>();
     const [project, setProject] = useState<Project>();
-    const [isOwner, setIsOwner] = useState<boolean>(false);
 
     const {id, name, deadline, user_id ,assigned_by_id, project_id, completed} = task.task;
 
@@ -33,21 +32,20 @@ export default function Task(task) {
           console.log(error)
             setError(error.message);
         })
-    
-        
-        axios.get(`${process.env.API_URL}api/users/${assigned_by_id}`, {
-          headers: headers
-        }).then((response) => {
-          setAssignedBy(response.data);
-      }).catch(error => {
-        console.log(error)
-        setError(error.message);
-      })
 
-      if(user) {
-        user_id == user.id && setIsOwner(true);
-      }
     }, [])
+
+  //Gets user by given id.
+  const getUserById = (id: number) => {
+    const ProjManager: User = users.find(user => user.id == id);
+    setAssignedBy(ProjManager);
+  }
+  //Filter out project manager when users are fetched.
+  useEffect(() => {
+    if(users) {
+      getUserById(assigned_by_id);
+    }
+  }, [users])
 
     const editHandler = () => {
       setSharedTask(task.task);
@@ -56,7 +54,7 @@ export default function Task(task) {
 
   return (
     <div className='card-body'>
-        {isOwner && <FaEdit size="2.5rem" className="edit-icon" onClick={editHandler}/>}
+        {(user && assigned_by_id == user.id) && <FaEdit size="2.5rem" className="edit-icon" onClick={editHandler}/>}
         <div className="container">
             <div className="title task-info">
                 <h5 className='heading'>Task: </h5>
@@ -80,8 +78,8 @@ export default function Task(task) {
             </div>
         </div>
         <div className="button-wrapper">
-        <Link href={`/task/${id}`} className='main-btn'>View Details
-        </Link>
+          <Link href={`/task/${id}`} className='main-btn'>View Details
+          </Link>
 
         </div>
     </div>

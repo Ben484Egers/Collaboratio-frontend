@@ -17,7 +17,7 @@ import { AppContext } from '../_contexts/AppContext'
 
 export default function dashboard() {
 
-  const {token, setMiddleware} = useContext(AuthContext);
+  const {setMiddleware} = useContext(AuthContext);
   const {showProjectForm, showTaskForm, searchTerm, getUserInfo, user, setError} = useContext(AppContext  );
   
   const [projects, setProjects] = useState<Project[]>();
@@ -65,8 +65,6 @@ export default function dashboard() {
 
     getTasksOfUser(headers);
     getProjects(headers);
-
-    getUserInfo();
   }, []);
 
   //If user is definded, setUsername

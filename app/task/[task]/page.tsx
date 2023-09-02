@@ -10,13 +10,15 @@ import Link from 'next/link'
 import { AppContext } from '@/app/_contexts/AppContext'
 import { Task } from '@/app/_types/Task'
 import MiniLoader from '@/app/_components/MiniLoader'
+import { User } from '@/app/_types/User'
 
 export default function page({params}) {
   const {setMiddleware, setLoading} = useContext(AuthContext);
+  const {users, setError} = useContext(AppContext);
   
   const {task} = params;
   
-  const [assignedByName, setAssignedByName] = useState<string>();
+  const [assignedBy, setAssignedBy] = useState<User>();
   const [assignedById, setAssignedById] = useState<number>();
   const [projectName, setProjectName] = useState<string>();
   const [projectId, setProjectId] = useState<number>();
@@ -24,12 +26,10 @@ export default function page({params}) {
   const [completed, setCompleted] = useState<boolean>();
   const [dataComplete, setDataComplete] = useState<boolean>(false);
   const [miniLoader, setMiniLoader] = useState<boolean>(false);
-  const [error, setError] = useState<string>();
 
 
   const handleChange = (e) => {
     setCompleted(e.target.checked);
-     
   }
 
   async function getSingleTask(task: Task) {
@@ -102,46 +102,39 @@ export default function page({params}) {
   })
 
   }
-  async function getUser(userId: number) {
-    const tk = localStorage.getItem("Collab-app");
-    let headers = {
-    'X-Requested-With': 'XMLHttpRequest',
-    'Content-type': 'application/json',
-    'Authorization': `Bearer ${tk}`
-    };
-    axios.get(`${process.env.API_URL}api/users/${userId}`, {
-      headers: headers
-    }).then((response) => {
-      setAssignedByName(response.data.name)
-      setLoading(false)
-  }).catch(error => {
-    console.log(error)
-      setError(error.message);
-      // setLoading(false)
-  })
-
+  
+  //Gets user by given id.
+  const getUserById = (id: number) => {
+    const ProjManager: User = users.find(user => user.id == id);
+    setAssignedBy(ProjManager);
   }
 
+  //On mount fetch task details
   useEffect(() => {
     setMiddleware('auth');
     getSingleTask(task)
   }, [])
-  
+
+  //When taskdetails are fetched & project_id is defined, fetch Project for name, 
+  // For better UX, make sure task is fetched, before we set the completed state. 
   useEffect(() => {
     if(!projectId){
       return
     }
-    setCompleted(taskData && taskData.completed)
+
     getSingleProject(projectId)
+    setCompleted(taskData && taskData.completed);
   }, [projectId])
-  
+
+    //Filter out project manager when users are defined.
+  //Gets Id from the task which is fetched.
   useEffect(() => {
-    if(!assignedById){
-      return
+    if(assignedById && users) {
+      getUserById(assignedById);
+      setDataComplete(true);
     }
-  getUser(assignedById).then(() => setDataComplete(true))
-  
-}, [assignedById])
+
+  }, [assignedById])
 
 
   return (
@@ -169,7 +162,7 @@ export default function page({params}) {
               </div>
               <div className="title task-info">
                   <h5 className='heading'>Assigned by: </h5>
-                  <h5 className='info'>{dataComplete ? assignedByName: <Pulse/>}</h5>
+                  <h5 className='info'>{assignedBy ? assignedBy.name: <Pulse/>}</h5>
               </div>
               <div className="title task-info">
                   <h5 className='heading'>Details: </h5>

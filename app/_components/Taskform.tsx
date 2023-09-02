@@ -7,30 +7,37 @@ import  { AxiosError } from 'axios';
 import {FaTimesCircle } from 'react-icons/fa'
 import { AppContext } from '../_contexts/AppContext';
 import { Task } from '../_types/Task';
-import MainButton from './MainButton';
 import MiniLoader from './MiniLoader';
 import DeleteButton from './DeleteButton';
+import { User } from '../_types/User';
 
 
 function Taskform({projectId}) {
-    const {createTask, user, setShowTaskForm, deleteTask, setSharedTask, sharedTask, updateTask} = useContext(AppContext);
+    const {users, createTask, user, setShowTaskForm, deleteTask, setSharedTask, sharedTask, updateTask} = useContext(AppContext);
     const [miniLoading, setMiniLoading] = useState<boolean>(false);
-    const [userId, setUserId] = useState<number>()
+    const [taskTakerId, setTaskTakerId] = useState<number>();
 
-
-    //When userData is found, set userId;
     useEffect(() => {
-        if(user){
-          setUserId(user.id)
-        } 
-      }, [user])
+        if(sharedTask){
+            setTaskTakerId(sharedTask.user_id);
+        }
+    }, [sharedTask])
+
+      //Change in user/tasktaker
+    const onOptionChangeHandler = (event) => {
+        const taskTakerName = event.target.value;
+        const taskTaker: User = getUserId(taskTakerName);
+        setTaskTakerId(taskTaker.id)
+    }
+    const getUserId = (name: string): User => {
+        return users.find(user => user.name == name);
+    }
     
       let name:string = ''
       let deadline:string = ''
       let details:string = ''
-      let pm_id:number = 0
-      let project_id:number = 0
-      let taskTaker: number = 0
+      let pm_id:number
+      let project_id:number
       let completed
   
     if(sharedTask !== undefined) {
@@ -39,17 +46,16 @@ function Taskform({projectId}) {
       details = sharedTask.description,
       pm_id = sharedTask.assigned_by_id,
       project_id = sharedTask.project_id,
-      taskTaker= sharedTask.user_id
       completed = sharedTask.completed
     }
-
+    
       //Formik Logic
-      const formik = useFormik({
+    const formik = useFormik({
         initialValues: {
             name: name,
             deadline: deadline,
             details: details,
-            taskTaker:taskTaker,
+            taskTaker: taskTakerId,
             completed: completed,
         },
     
@@ -60,7 +66,6 @@ function Taskform({projectId}) {
         
         onSubmit: async (values) => {
             setMiniLoading(true);
-
             let taskCompleted: boolean;
         //Check if project is completed
             if(values.completed == undefined) {
@@ -72,13 +77,13 @@ function Taskform({projectId}) {
         let payload: Task = {
             name: values.name,
             project_id: projectId ? projectId : project_id,
-            user_id: values.taskTaker,
-            assigned_by_id: userId,
             description: values.details,
             deadline: values.deadline,
             //User responsible
-            completed: taskCompleted,
+            user_id: taskTakerId,
             //Logged in user
+            assigned_by_id: user && user.id,
+            completed: taskCompleted,
         }
 
         try {
@@ -98,6 +103,7 @@ function Taskform({projectId}) {
 
     },
     });
+
 
     const deleteHandler = async() =>{
         setMiniLoading(true);
@@ -164,28 +170,20 @@ function Taskform({projectId}) {
                 </div>
                 <div className="form-control">
                     <label htmlFor="taskTaker">Task Taker:</label>
-                    <input id='taskTaker' name='taskTaker' type="number" className='taskTaker-input' onChange={formik.handleChange}
-                            value={formik.values.taskTaker}/>
-                    {(formik.touched.taskTaker && formik.errors.taskTaker) && 
-                        <p className='form-error'>
-                            {formik.errors.taskTaker}
-                        </p>
-                    }
-                </div>
-
-                {/* <select onChange={formik.handleChange} value={formik.values.completed}  id='users'>
-                    {users.map((user, index) => {
-                        return <option key={index}>
-                                    {user}
+                <select onChange={onOptionChangeHandler} id='users'>
+                    {users && users.map((entity, index) => {
+                        return <option  key={index}>
+                                    {entity.name}
                                 </option>
                     })}
                 </select> 
-                {(formik.touched.user && formik.errors.user) && 
+                </div>
+                {/* {(formik.touched.user && formik.errors.user) && 
                     <p className='form-error'>
                         {formik.errors.user}
                     </p>
-                }
-                */}
+                } */}
+               
                 <div className="form-control checkbox-control">
                     <label htmlFor="completed" className='checkbox-label'>Completed:</label>
                     <input id='completed' name='completed' type="checkbox" className='checkbox-input' onChange={formik.handleChange}

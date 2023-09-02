@@ -1,45 +1,31 @@
 import Link from 'next/link';
 import React, {useEffect, useState, useContext} from 'react'
-import axios from 'axios'
 import Image from 'next/image';
 import Pulse from './Pulse';
 import { AppContext } from '../_contexts/AppContext';
 import { User } from '../_types/User';
 import { FaEdit } from 'react-icons/fa';
-import { useRouter } from 'next/navigation';
 import { Project } from '../_types/Project';
 
 
 export default function Project({project}) {
-  const {setError, user, setSharedProject, setShowProjectForm} = useContext(AppContext);
+  const {user, users, setSharedProject, setShowProjectForm} = useContext(AppContext);
   const [projectManager, setProjectManager] = useState<User>();
-  const [isOwner, setIsOwner] = useState<boolean>(false);
 
-  // console.log(project)
   const {id, name, deadline, user_id, description, completed} = project;
   
-  useEffect(() => {
-    const tk = localStorage.getItem("Collab-app");
-    let headers = {
-      'X-Requested-With': 'XMLHttpRequest',
-      'Content-type': 'application/json',
-      'Authorization': `Bearer ${tk}`
-    };
-  
-    //Get projectmanager/user of project
-    axios.get(`${process.env.API_URL}api/users/${user_id}`, {
-      headers: headers
-    }).then((response) => {
-      setProjectManager(response.data);
-    }).catch(error => {
-      console.log(error)
-      setError(error.message);
-    })
+  //Gets user by given id.
+  const getUserById = (id: number) => {
+    const ProjManager: User = users.find(user => user.id == id);
+    setProjectManager(ProjManager);
+  }
 
-    if(user) {
-      user_id == user.id && setIsOwner(true);
+  //Filter out project manager when users are fetched.
+  useEffect(() => {
+    if(users) {
+      getUserById(user_id);
     }
-  }, [])
+  }, [users])
 
   const editHandler = () => {
     setSharedProject(project);
@@ -48,7 +34,7 @@ export default function Project({project}) {
   
   return (
     <div className='card-body project-body'>
-      {isOwner && <FaEdit size="2.5rem" className="edit-icon" onClick={editHandler}/>}
+      {(user && user_id == user.id) && <FaEdit size="2.5rem" className="edit-icon" onClick={editHandler}/>}
         <div className="img">
         <Image src={`/project${Math.floor(Math.random() * 3) + 1}.jpg`} 
           width='1000'
