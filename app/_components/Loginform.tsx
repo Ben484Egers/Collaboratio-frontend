@@ -8,6 +8,7 @@ import axios, { AxiosError } from 'axios';
 import { AuthContext } from '../_contexts/AuthContext';
 import { User } from '../_types/User';
 import Link from 'next/link';
+import { AppContext } from '../_contexts/AppContext';
 
 
 export default function Loginform() {
@@ -15,6 +16,7 @@ export default function Loginform() {
     const [newCommer, setNewCommer] = useState(false);
     
     const {loginHandler} = useContext(AuthContext);
+    const {setError} = useContext(AppContext);
 
     useEffect(() => {
         if (localStorage.getItem("Collab-app") == undefined){
@@ -44,12 +46,9 @@ export default function Loginform() {
             password: values.password
         }        
 
-        try {
-            const response = await loginHandler(JSON.stringify(payLoad));
-        } catch (e) {
-            const error = e  as AxiosError;
-            alert(error);
-        }
+        const response = await loginHandler(JSON.stringify(payLoad)).catch(error => {
+            setError("Something went wrong.., Please try again");
+        });
 
     },
 

@@ -41,7 +41,7 @@
     --main-color: #088f8f;
     --secund-color: #004c4c;
     --white: #ffffff;
-    --of-white: #fffffff5;
+    --off-white: #fffffff5;
     --card-bg: #f0f0f0;
     --text-color: #000000;
     --card-color: #d9d9d949;
@@ -51,16 +51,46 @@ html{
     scroll-behavior:smooth;
 }
 body{
-    background: var(--of-white);
+    background: var(--off-white);
     /* font-family: var(--main-font); */
     overflow-x: hidden;
 }
 
-.btn-fixed{
-    position: fixed;
-    right: 2rem;
-    top: 6rem;
-    z-index: 150;
+@media (prefers-color-scheme: dark) {
+
+    :root {
+        --main-color: #088f8f;
+        --secund-color: #004c4c;
+        --white: #ffffff;
+        --card-bg: #f0f0f0;
+        --text-color: #000000;
+        --gray: #ddd8d8;
+        --off-white: #efefef;
+        --card-color: #efefef;
+    }
+
+    body{
+        background-color: var(--text-color);
+        color: var(--off-white)
+    }
+
+        h4, h5, h3, h2{
+            color: var(--off-white);
+        }
+    
+        .heading-2, .heading-3{
+            color: var(--main-color);
+        }
+
+    .nav{
+        .nav-box{
+            background-color: var(--text-color);
+        }
+
+        a{
+            color: var(--off-white) !important;
+        }
+    }
 }
 
 /* Utilitie styling  */
@@ -103,8 +133,8 @@ p{
     position: fixed;
     right: 2rem;
     top: 6rem;
+    z-index: 150;
 }
-
 
 .container {
     width: 90%;
@@ -137,7 +167,7 @@ p{
   align-items: flex-start;
   position:sticky;
   top: 0;
-  z-index: 80;
+  z-index: 180;
 
   .hidden{
     display: none;
@@ -147,7 +177,7 @@ p{
 
 .branding, 
 ul li a{
-    z-index: 1000;
+    z-index: 250;
 }
 
 .branding{

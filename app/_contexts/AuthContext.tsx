@@ -4,8 +4,6 @@ import { Router } from 'next/router';
 import {useRouter} from 'next/navigation'
 import axios from 'axios'
 import { User } from '../_types/User';
-import { Project } from '../_types/Project';
-import { Task } from '../_types/Task';
 
 export interface AuthContextInterface {
   token: string,
@@ -128,9 +126,10 @@ export default function AuthProvider({children}) {
           setToken(response.data.token)
           localStorage.setItem("Collab-app", response.data.token);
           setLoggedIn(true)
-      }).catch( error => {    
+      }).catch( error => {  
+          setLoading(false)  
           // if(error.response.status != 422) throw error
-          return (error.message);
+          return (error);
       })
     }
   
@@ -151,6 +150,7 @@ export default function AuthProvider({children}) {
       }).catch( error => {
         console.log(error.data.message);
         setLoading(false);
+        return error;
       })
     }
       
@@ -170,8 +170,11 @@ export default function AuthProvider({children}) {
         setToken('undefined');
         localStorage.setItem("Collab-app", 'undefined');
         setLoggedIn(false);
+        //Wil trigger reload and all state wil start fresh.
+        router.refresh();
       }).catch(error => {
-        console.log(error.message);
+        console.log(error);
+        return error;
       })
       setAuthCheckDone(true);
     }

@@ -102,7 +102,7 @@ export default function dashboard() {
     <main className='dashboard container'>
     <SearchBar searchHandler={handleSubmit}/>
       <div className="welcome">
-      <h2>Welcome, {!username ? '' : username}</h2>
+      <h3>Welcome, {!username ? '' : username}</h3>
       <button onClick={refresHandler} className='btn-3 btn-fixed'>Refresh</button>
       </div>
       <TasksContainer tasks={tasks}/>

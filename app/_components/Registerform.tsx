@@ -6,10 +6,12 @@ import * as Yup from "yup";
 import { AuthContext } from '../_contexts/AuthContext';
 import { User } from '../_types/User';
 import Link from 'next/link';
+import { AppContext } from '../_contexts/AppContext';
 
 
 export default function Registerform() {
     const {registerHandler, loading} = useContext(AuthContext);
+    const {setError} = useContext(AppContext);
 
 //Formik Logic
 const formik = useFormik({
@@ -37,20 +39,12 @@ const formik = useFormik({
             password_confirmation: values.password_confirmation
         }
 
-        const response = registerHandler(JSON.stringify(payLoad))
-        // try {
-        //     console.log(response)
-        // } catch (e) {
-        //     const error = e  as AxiosError;
-        //     alert(error);
-        // }
-
-        
-    },
+        const response = registerHandler(payLoad).catch( (error) => {
+            setError("Something went wrong.., Please try again")
+        })
+    }
 
     });
-    
-    if(loading) return <>Loading...</>
     
     return (
         <div id="register-form" className='form-wrapper register-form'>
