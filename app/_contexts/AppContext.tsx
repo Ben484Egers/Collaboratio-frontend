@@ -35,6 +35,7 @@ export interface AppContextInterface {
   updateTask: Function,
   deleteTask: Function,
   getUserInfo: Function,
+  uploadResource: Function,
 
 }
 
@@ -214,9 +215,28 @@ export default function AppProvider({children}) {
 })
 }
 
+//Upload a resource
+const uploadResource = async (payload) => {
+  const tk = localStorage.getItem("Collab-app");
+  let headers = {
+  'X-Requested-With': 'XMLHttpRequest',
+  'Content-type': 'application/json',
+  'Authorization': `Bearer ${tk}`
+  };
+// await csrf()
+    await axios.post(`${process.env.API_URL}api/resources`, payload , {
+        headers: headers
+    }).then((response) => {
+      console.log(response.data)
+    return response.data;
+  }).catch( error => {
+    console.log(error);
+  })
+}
+
     
     return (
-        <AppContext.Provider value={{users, setUsers, usersTasks, setUsersTasks, projects, setProjects, sharedTask, setSharedTask, updateTask, deleteTask, deleteProject, updateProject, sharedProject, setSharedProject,createTask, showTaskForm, setShowTaskForm, getUserInfo, user, setUser, createProject, searchTerm, setSearchTerm, showProjectForm, setShowProjectForm, error, setError}}>
+        <AppContext.Provider value={{uploadResource, users, setUsers, usersTasks, setUsersTasks, projects, setProjects, sharedTask, setSharedTask, updateTask, deleteTask, deleteProject, updateProject, sharedProject, setSharedProject,createTask, showTaskForm, setShowTaskForm, getUserInfo, user, setUser, createProject, searchTerm, setSearchTerm, showProjectForm, setShowProjectForm, error, setError}}>
             {loading && <Loader/>}
             {children}
         </AppContext.Provider>

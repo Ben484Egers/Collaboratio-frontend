@@ -21,8 +21,10 @@ const montserrat = Montserrat({
 
   return (
     <html lang="en">
+      <head>
       <link rel="shortcut icon" href="/logo.png" type="image/x-icon" />
       <title>Collaboratio</title>
+      </head>
       <body className={`${montserrat.className}`}>
         <AuthProvider>
           <AppProvider>

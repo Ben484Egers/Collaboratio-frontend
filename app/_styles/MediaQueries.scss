@@ -103,9 +103,17 @@ body::-webkit-scrollbar{
         }
     }
 
+    .main-btn, .secundary-btn, .btn-delete {
+        padding: 5px 10px;
+    }
     
     .form-wrapper{
         min-width: 320px;
+    }
+
+    .cancel{
+         right: -10px !important;
+         top: 35px !important;
     }
     .login-form{
         width: 300px !important;

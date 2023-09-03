@@ -8,6 +8,7 @@ import { Task } from '../_types/Task'
 import axios from 'axios'
 import { Event } from '../_types/Event'
 import MiniLoader from '../_components/MiniLoader'
+import Notifications from '@/app/_components/Notifications'
 
 
 export default function calendar() {
@@ -90,6 +91,7 @@ export default function calendar() {
   return (
     <main>
       {miniLoader && <MiniLoader/>}
+      <Notifications/>
       <Calendar events={events}/>
     </main>
   )

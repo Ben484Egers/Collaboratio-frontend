@@ -12,7 +12,7 @@ import DeleteButton from './DeleteButton';
 
 
 function Projectform() {
-    const {createProject, setShowProjectForm, sharedProject, setSharedProject, updateProject, deleteProject, user} = useContext(AppContext);
+    const { uploadResource, createProject, setShowProjectForm, sharedProject, setSharedProject, updateProject, deleteProject, user} = useContext(AppContext);
     const [miniLoading, setMiniLoading] = useState<boolean>(false);
 
     let name:string = ''
@@ -21,6 +21,7 @@ function Projectform() {
     let userId:number = 0
     let completed
 
+
   if(sharedProject !== undefined) {
     name = sharedProject.name,
     deadline = sharedProject.deadline,
@@ -28,6 +29,7 @@ function Projectform() {
     userId = sharedProject.user_id,
     completed = sharedProject.completed
   }
+  
   
     //Formik Logic
   const formik = useFormik({
@@ -38,16 +40,16 @@ function Projectform() {
         details: details,
         user: userId,
         resources: [],
-        completed: completed,
+        completed: completed
     },
 
     //Validate form
     validationSchema: Yup.object({
         name: Yup.string().min(4, "Name must be a minimum of 4 characters long").required("*Projectname is Required"),
         deadline: Yup.date(),
-        // detials: Yup.string().min(10, 'Could you spare some more tea? A minimum of 10 characters.').required("*Please give some details about the project"),
-        // completed: Yup.boolean()
     }),
+
+    
     
     onSubmit: async (values) => {
         setMiniLoading(true);
@@ -71,6 +73,8 @@ function Projectform() {
             user_id: userId,
             completed: projectCompleted
         }
+
+
         try {
             if(sharedProject !== undefined)  {
                 payload = {...payload, id: sharedProject.id}
@@ -80,7 +84,7 @@ function Projectform() {
             }   
         } catch (e) {
             const error = e  as AxiosError;
-            alert(error.message);
+            alert(error);
         }
 
         setMiniLoading(false);
@@ -155,18 +159,13 @@ const hideProjectform =() =>{
                 <div className="form-control">
                     <label htmlFor="resources">Resources:</label>
                     <input id='resources' name='resources' type="file" className='resources-input' multiple onChange={formik.handleChange}
-                        value={formik.values.resources}/>
+                        />
                 </div>
 
                 <div className="form-control checkbox-control">
                     <label htmlFor="completed" className='checkbox-label'>Completed:</label>
                     <input id='completed' name='completed' type="checkbox" className='checkbox-input' onChange={formik.handleChange}
                             value='checked' />
-                    {/* {(formik.touched.completed && formik.errors.completed) && 
-                        <p className='form-error'>
-                            {formik.errors.completed}
-                        </p>
-                    } */}
                 </div>
                 
                 { sharedProject ? 

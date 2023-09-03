@@ -8,11 +8,12 @@
     justify-content: center;
     align-items: center;
     box-shadow: 5px 10px 15px rgba($color: #000000, $alpha: 0.3);
-
+    z-index: 300;
     .heading{
         width: max-content;
         margin: 5px auto 10px;
     }
+
 
 }
 
@@ -97,11 +98,20 @@ form{
     padding: 5px 10px;
     background-color: var(--main-color);
     color: var(--white);
-    font-size: 1rem;
+    font-size: var(--text-size-5);
     cursor: pointer;
     border-radius: 2px;
 }
-
+.btn-delete {
+    padding: 8px 15px;
+    border-radius: 2px;
+    font-weight: 700;
+    background-color: firebrick;
+    color: var(--white);
+    font-size: var(--text-size-4);
+    transition: 0.3s ease-in-out;
+    width: fit-content;
+}
 .add-btn{
     border-radius: 20px;
     padding: 8px 1rem;
