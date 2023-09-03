@@ -6,7 +6,7 @@ export default function TasksContainer({tasks}) {
 
 
   return (
-    <section id="tasks-container container">
+    <section id="tasks-container">
       <div className="header">
       <h3>Tasks:</h3>
       </div>

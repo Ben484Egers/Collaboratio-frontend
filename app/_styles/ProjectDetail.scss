@@ -2,9 +2,10 @@
     width: 100vw;
     .container{
         .go-back{
-            font-size: var(--text-size-4);
+            font-size: var(--text-size-5);
             cursor: pointer;
             text-decoration: underline;
+            font-weight: 400;
         }
 
         .heading{

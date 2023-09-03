@@ -44,8 +44,7 @@
     --off-white: #fffffff5;
     --card-bg: #f0f0f0;
     --text-color: #000000;
-    --card-color: #d9d9d949;
-    --gray: #ddd8d8;
+    --card-color: #ddd8d8;
 }
 html{
     scroll-behavior:smooth;
@@ -234,7 +233,7 @@ li .special{
       left: 0;
       height: 85px;
       width: 100%;
-      background-color: var(--of-white);
+      background-color: var(--off-white);
       z-index: -5;
       opacity: 0.98;
   }
