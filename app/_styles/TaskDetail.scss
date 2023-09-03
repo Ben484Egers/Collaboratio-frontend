@@ -5,7 +5,8 @@
         .go-back{
             font-size: var(--text-size-4);
             cursor: pointer;
-            color: var(--main-color);
+            text-decoration: underline;
+            font-weight: 400;;
         }
 
         .heading{
