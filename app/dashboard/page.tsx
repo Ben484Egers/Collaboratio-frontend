@@ -17,7 +17,7 @@ import { AppContext } from '../_contexts/AppContext'
 
 export default function dashboard() {
 
-  const {setMiddleware} = useContext(AuthContext);
+  const {setMiddleware, loggedIn} = useContext(AuthContext);
   const {showProjectForm, showTaskForm, searchTerm, getUserInfo, user, setError} = useContext(AppContext  );
   
   const [projects, setProjects] = useState<Project[]>();
@@ -37,8 +37,10 @@ export default function dashboard() {
     'Authorization': `Bearer ${tk}`
     };
 
-    getTasksOfUser(headers);
-    getProjects(headers);
+    if(loggedIn) {
+      getTasksOfUser(headers);
+      getProjects(headers);
+    }
   }, []);
   
   //If user is definded, setUsername
@@ -57,8 +59,8 @@ export default function dashboard() {
       setTasks(response.data);
       // console.log(response.data)
   }).catch(error => {
-    console.log(error)
-    setError(error.message);
+    // console.log(error)
+    setError("Could not fetch tasks. Try again later...");
   })
   }
 
@@ -70,8 +72,8 @@ export default function dashboard() {
       setProjects(response.data);
       // console.log(response.data)
   }).catch(error => {
-    console.log(error)
-      setError(error.message);
+    // console.log(error)
+      setError("Could not fetch prokjects. Try again later...");
   })
   }
 

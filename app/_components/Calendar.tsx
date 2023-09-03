@@ -19,7 +19,7 @@ function Calendar({events}) {
             center: "title",
             end: "dayGridMonth,timeGridWeek,timeGridDay",
             }}
-            events={events}
+            events={events && events}
             eventContent={renderEventContent}
             height={"85vh"}
         />
