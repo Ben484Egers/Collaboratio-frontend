@@ -15,7 +15,7 @@ export default function Loginform() {
 
     const [newCommer, setNewCommer] = useState(false);
     
-    const {loginHandler, setCheckAuth} = useContext(AuthContext);
+    const {loginHandler, setLoading} = useContext(AuthContext);
     const {setError} = useContext(AppContext);
 
     useEffect(() => {
@@ -48,8 +48,7 @@ export default function Loginform() {
 
         const response = await loginHandler(JSON.stringify(payLoad)).catch(error => {
             setError("Invalid credentials.., Please try again");
-            //Chech the authentication en reroute accordingly.
-            setCheckAuth(true);
+            setLoading(false);
 
         });
 
