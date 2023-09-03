@@ -171,7 +171,7 @@ export default function AuthProvider({children}) {
         localStorage.setItem("Collab-app", 'undefined');
         setLoggedIn(false);
         //Wil trigger reload and all state wil start fresh.
-        router.refresh();
+        window.location.reload()
       }).catch(error => {
         console.log(error);
         return error;
