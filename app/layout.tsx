@@ -4,6 +4,7 @@ import './globals.scss'
 import AuthProvider from './_contexts/AuthContext';
 import Nav from './_components/Nav'
 import { ToastContainer} from 'react-toastify';
+import Head from 'next/head';
 
 
 import { Montserrat } from 'next/font/google'
@@ -25,10 +26,10 @@ const montserrat = Montserrat({
 
   return (
     <html lang="en">
-      <head>
+      <Head>
       <link rel="shortcut icon" href="/logo.ico" type="image/x-icon" />
       <title>Collaboratio</title>
-      </head>
+      </Head>
       <body className={`${montserrat.className}`}>
         <AuthProvider>
           <AppProvider>
