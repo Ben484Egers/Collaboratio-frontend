@@ -10,7 +10,7 @@ import { AppContext } from '../_contexts/AppContext';
 
 
 export default function Registerform() {
-    const {registerHandler, loading} = useContext(AuthContext);
+    const {registerHandler, setCheckAuth} = useContext(AuthContext);
     const {setError} = useContext(AppContext);
 
 //Formik Logic
@@ -41,6 +41,8 @@ const formik = useFormik({
 
         const response = registerHandler(payLoad).catch( (error) => {
             setError("Something went wrong.., Please try again")
+            //Chech the authentication en reroute accordingly.
+            setCheckAuth(true)
         })
     }
 
