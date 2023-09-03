@@ -13,14 +13,14 @@ import Notifications from '@/app/_components/Notifications'
 
 export default function calendar() {
     const {setMiddleware} = useContext(AuthContext);
-    const {showProjectForm, showTaskForm, getUserInfo, user, setError} = useContext(AppContext);
+    const { setError} = useContext(AppContext);
      const [projects, setProjects] = useState<Project[]>();
     const [tasks, setTasks] = useState<Task[]>();
     const [tasksAndProjects, setTasksAndProjects] = useState([]);
     const [events, setEvents] = useState([]);
     const [miniLoader, setMiniLoader] = useState<boolean>(false);
 
-  
+  //Set middlewate, get initial data when component mounts
   useEffect(() => {
     setMiniLoader(true);
     setMiddleware('auth');
@@ -35,6 +35,7 @@ export default function calendar() {
     getProjects(headers);
   }, []);
 
+    //When initial data is fetched, merge the arrays.
     useEffect(() => {
     if(projects !== undefined) {
       setTasksAndProjects([...projects, ...tasks]);
@@ -43,7 +44,7 @@ export default function calendar() {
 
   }, [projects]);
 
-
+    //When initial data is merged, start mapping data to an Event Object, used for calendar component
     useEffect(() => {
     if(tasksAndProjects !== undefined) {
       // console.log(events);
@@ -91,7 +92,6 @@ export default function calendar() {
   return (
     <main>
       {miniLoader && <MiniLoader/>}
-      <Notifications/>
       <Calendar events={events}/>
     </main>
   )

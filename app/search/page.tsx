@@ -10,17 +10,17 @@ import { Project } from '../_types/Project'
 import { Task } from '../_types/Task'
 import { AuthContext } from '../_contexts/AuthContext'
 import MiniLoader from '../_components/MiniLoader'
+import Taskform from '../_components/Taskform'
+import Projectform from '../_components/Projectform'
 
 export default function page() {
 
     const {setMiddleware, setLoading} = useContext(AuthContext);
-    const {searchTerm} = useContext(AppContext);
+    const {searchTerm, showProjectForm, showTaskForm} = useContext(AppContext);
 
     const [projects, setProjects] = useState<Project[]>();
     const [tasks, setTasks] = useState<Task[]>();
     const [filteredTerm, setFilteredTerm] = useState<string>();
-    const [miniLoader, setMiniLoader] = useState<boolean>(false);
-
 
     const router = useRouter();
   
@@ -28,6 +28,7 @@ export default function page() {
     let projectSearchUrl: string;
     let tasksSearchUrl: string;
     
+    //Set middleware, configure search term & search api by search term when component mounts.
     useEffect(() => {
       setMiddleware('auth');
       if(term == undefined || term == null){
@@ -38,16 +39,24 @@ export default function page() {
 
 
     async function fetchProjectsAndTasks(searchValue:string) {
+        //Empty projects and tasks array, for beter ux when data comes back
         setProjects(null)
         setTasks(null)
+        //If searchvalue not present, return
         if(searchValue == null) return;
-        const search = searchValue.trim();
-        setFilteredTerm(searchValue.trim())
 
+        //Set searchterm (shown on screen) to searchvalue
+        setFilteredTerm(searchValue.trim())
+        
+        //Trim searchterm for api search.
+        const search = searchValue.trim();
+        
         if(searchValue.trim() == ''){
+          //If searchterm = empty string, get all projects and tasks.
           tasksSearchUrl = `${process.env.API_URL}api/tasks/all`
           projectSearchUrl =  `${process.env.API_URL}api/projects`
         } else {
+          //Else search bij searchterm
           tasksSearchUrl = `${process.env.API_URL}api/tasks/search/${search}`
           projectSearchUrl = `${process.env.API_URL}api/projects/search/${search}`
         }
@@ -86,26 +95,29 @@ export default function page() {
         fetchProjectsAndTasks(searchTerm).then(() => setLoading(false));
       }
 
-      const onRefresh = () => {
-        setMiniLoader(true)
+      const refreshHandler = () => {
+        //Empty projects and tasks array, for beter ux when data comes back
+        setProjects(null)
+        setTasks(null)
+        
+        //Refetch intial data
         fetchProjectsAndTasks(searchTerm)
-        setMiniLoader(false)
-
       }
 
 
   return (
     <main className='container'>
-      {miniLoader && <MiniLoader/>}
     <SearchBar searchHandler={handleSubmit}/>
     <div className="searchterm">
       <h5>Showing results for: "{filteredTerm}"</h5>
     </div>
-    <button onClick={onRefresh} className='btn-3 btn-fixed'>Refresh</button>
-
+    <button onClick={refreshHandler} className='btn-3 btn-fixed'>Refresh</button>
     <TasksContainer tasks={tasks}/>
     <ProjectsContainer projects={projects}/>
-    
+
+    {/*Show forms for editing entity */}
+    {showTaskForm && <Taskform projectId={undefined}/>}
+    {showProjectForm && <Projectform/>}
   </main>
   )
 }

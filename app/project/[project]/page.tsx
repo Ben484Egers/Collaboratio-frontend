@@ -19,7 +19,7 @@ import MiniLoader from '@/app/_components/MiniLoader'
 
 export default function page({params}) {
   const {setMiddleware} = useContext(AuthContext);
-  const {showTaskForm, setShowTaskForm, user, users} = useContext(AppContext);
+  const {showTaskForm, setShowTaskForm, user, users, setError} = useContext(AppContext);
 
   
   const {project} = params;
@@ -27,17 +27,11 @@ export default function page({params}) {
   const [projectData, setProjectData] = useState<Project>();
   const [tasks, setTasks] = useState<Task[]>();
   const [projectManager, setProjectManager] = useState<User>();
-  const [resources, setResources] = useState('');
+  const [resources, setResources] = useState([]);
   const [completed, setCompleted] = useState<boolean>();
-  const [dataComplete, setDataComplete] = useState<boolean>(false);
-  const [error, setError] = useState<string>();
   const [miniLoader, setMiniLoader] = useState<boolean>(false);
 
-
-  const handleChange = (e) => {
-    setCompleted(e.target.checked);
-  }
-
+  //Set middleware & get initial data when component mounts
   useEffect(() => {
     setMiddleware('auth');
     getSingleProject(project);
@@ -45,16 +39,12 @@ export default function page({params}) {
   }, []);
 
   
-  //Filter out project manager when users and projectdata are fetched.
+  //Filter out project manager when users and projectdata(user_id) are fetched.
   useEffect(() => {
     if(projectData && users){
     getUserById(projectData.user_id)
     }
   }, [projectData, users]);
-
-  useEffect(() => {
-    setDataComplete(true);
-  }, [projectManager])
 
 
   //Gets user by given id.
@@ -64,8 +54,7 @@ export default function page({params}) {
   }
 
   
-  async function getSingleProject(project) {
-    // setLoading(true)
+  async function getSingleProject(project: number) {
   const tk = localStorage.getItem("Collab-app");
   let headers = {
   'X-Requested-With': 'XMLHttpRequest',
@@ -80,13 +69,11 @@ export default function page({params}) {
   }).catch(error => {
     console.log(error)
       setError(error.message);
-      // setLoading(false)
   })
 }
 
 
   async function getTasksOfProject(projectId: number) {
-    // setLoading(true)
     const tk = localStorage.getItem("Collab-app");
     let headers = {
     'X-Requested-With': 'XMLHttpRequest',
@@ -98,11 +85,9 @@ export default function page({params}) {
     }).then((response) => {
       setTasks(response.data);
       // console.log(response.data)
-      // setLoading(false)
     }).catch(error => {
       console.log(error)
-        setError(error.message);
-        // setLoading(false)
+        setError(error);
     })
 
   }
@@ -111,7 +96,9 @@ const addTask = () => {
   setShowTaskForm(true)
 }
 
-const onRefresh = () => {
+const refresHandler = () => {
+    //Empty tasks array, for beter ux when data comes back
+    setTasks(null);
   const tk = localStorage.getItem("Collab-app");
   let headers = {
   'X-Requested-With': 'XMLHttpRequest',
@@ -121,8 +108,6 @@ const onRefresh = () => {
   setMiniLoader(true)
   getTasksOfProject(project);
   setMiniLoader(false)
-
-
 }
 
   return (
@@ -132,7 +117,7 @@ const onRefresh = () => {
         <div className="go-back">
           <Link href={'/dashboard'}>Go to Dashboard</Link>
         </div>
-        <button onClick={onRefresh} className='btn-3 btn-fixed'>Refresh</button>
+        <button onClick={refresHandler} className='btn-3 btn-fixed'>Refresh</button>
         <div className="heading project-heading">
           <div className="name">
           <h3>Project:</h3>
@@ -173,15 +158,12 @@ const onRefresh = () => {
                             value='checked' checked={completed}
                           /> */}
           </div>
-
         </div>
         <TasksContainer tasks={tasks}/>
-        {/* <div className="button-wrapper wrapper-full">
-          <MainButton btnText={'Save'} onClickHandler={updateProject}/>
-        </div> */}
-
       </div>
-      {showTaskForm && <Taskform projectId={project}/>}
+
+      {/*Show form for creating / editing entity */}
+      {showTaskForm && <Taskform projectId={parseInt(project)}/>}
     </main>
   )
 }

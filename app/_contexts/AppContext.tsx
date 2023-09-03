@@ -7,6 +7,9 @@ import { Task } from '../_types/Task';
 import { AuthContext } from './AuthContext';
 import Loader from '../_components/Loader';
 
+
+import {toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export interface AppContextInterface {
   user: User, 
   searchTerm: string,
@@ -18,6 +21,7 @@ export interface AppContextInterface {
   usersTasks: Task[],
   users: User[],
   error: string | undefined,
+  succesMessage: string | undefined,
   setUser: Dispatch<SetStateAction<User>>,
   setUsers: Dispatch<SetStateAction<User[]>>,
   setSearchTerm: Dispatch<SetStateAction<string>>,
@@ -28,6 +32,7 @@ export interface AppContextInterface {
   setSharedTask: Dispatch<SetStateAction<Task>>,
   setUsersTasks: Dispatch<SetStateAction<Task[]>>,
   setError: Dispatch<SetStateAction<string | undefined>>,
+  setSuccesMessage: Dispatch<SetStateAction<string | undefined>>,
   createProject: Function,
   updateProject: Function,
   deleteProject: Function,
@@ -53,8 +58,10 @@ export default function AppProvider({children}) {
     const [projects, setProjects] = useState<Project[]>();
     const [usersTasks, setUsersTasks] = useState<Task[]>();
     const [error, setError] = useState<string | undefined>();
+    const [succesMessage, setSuccesMessage] = useState<string | undefined>();
     
-
+    //Get all users, and loggedin user when layout first mounts.
+    //Its neccesary data for ownership etc..
     useEffect(() => {
       getUserInfo()
       getUsers()
@@ -111,9 +118,11 @@ export default function AppProvider({children}) {
           await axios.post(`${process.env.API_URL}api/projects`, payload , {
               headers: headers
           }).then((response) => {
+            notify("Project Created Succesfully 🎨👔")
           setShowProjectForm(false);
           return response.data;
         }).catch( error => {
+          notifyError("Could not create project. Check ur fields constraints. 🚩🚨")
           console.log(error);
         })
       }
@@ -129,11 +138,11 @@ export default function AppProvider({children}) {
         axios.put(`${process.env.API_URL}api/projects/${payload.id}`,payload, {
           headers: headers
         }).then((response) => {
-          setShowProjectForm(false);
-          setSharedProject(undefined);
+          // console.log(response)
+          notify("Project Updated Succesfully 🧩⚙")
         }).catch(error => {
           console.log(error)
-            setError(error);
+          notifyError("Could not update project. Check ur fields constraints. 🚩🚨")
         })
     
       }
@@ -150,10 +159,11 @@ export default function AppProvider({children}) {
     axios.delete(`${process.env.API_URL}api/projects/${id}`, {
       headers: headers
     }).then((response) => {
-        setSharedProject(undefined)
-  }).catch(error => {
+      // console.log(response)
+      notify("Project Deleted Succesfully 🧨🗑")
+    }).catch(error => {
     console.log(error)
-      setError(error);
+    notifyError("Could not delete project. Check ur fields constraints. 🚩🚨")
   })
   }
 
@@ -169,10 +179,13 @@ export default function AppProvider({children}) {
           await axios.post(`${process.env.API_URL}api/tasks`, payload , {
               headers: headers
           }).then((response) => {
-          setLoading(false);
-          setShowTaskForm(false);
+            // console.log(response)
+            notify("Task Created Succesfully 🎨👔")
+            return response;
         }).catch( error => {
           console.log(error);
+          notifyError("Could not create task. Check ur fields constraints. 🚩🚨")
+          return error;
         })
     }
 
@@ -187,13 +200,12 @@ export default function AppProvider({children}) {
       axios.put(`${process.env.API_URL}api/tasks/${payload.id}`,payload, {
         headers: headers
       }).then((response) => {
-        setShowTaskForm(false);
-        setSharedTask(undefined);
+        // console.log(response)
+        notify("Task Updated Succesfully 🔨⚙")
       }).catch(error => {
         console.log(error)
-          setError(error);
-      })
-  
+        notifyError("Could not update task. Check ur fields constraints. 🚩🚨")
+      })  
     }
 
   //Delete a task.
@@ -208,10 +220,12 @@ export default function AppProvider({children}) {
   axios.delete(`${process.env.API_URL}api/tasks/${id}`, {
     headers: headers
   }).then((response) => {
-    setSharedTask(undefined)
-}).catch(error => {
+    // console.log('succesfully deleted')
+    notify("Task Deleted Succesfully 🔗🗑")
+  }).catch(error => {
   console.log(error)
-    setError(error);
+  notifyError("Could not delete task. Check ur fields constraints. 🚩🚨")
+  return
 })
 }
 
@@ -234,9 +248,51 @@ const uploadResource = async (payload) => {
   })
 }
 
+//When succesMessage or Error is present in de appcontext, this wil run.
+useEffect(() => {
+  if(succesMessage) {
+    notify(succesMessage);
+    return
+  }
+  if(error) {
+    notifyError(error);
+  }
+}, [succesMessage, error])
+
+//Toastify
+const timer = 5000
+
+  const notify = (succesMessage: string) => {
+    toast.success( succesMessage, {
+      position: "top-right",
+      autoClose: timer,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+    setSuccesMessage(undefined)
+  }
+
+  const notifyError = (errorMessage: string) => {
+    toast.error(errorMessage, {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored"
+    });
+    setError(undefined);
+  }
+
     
     return (
-        <AppContext.Provider value={{uploadResource, users, setUsers, usersTasks, setUsersTasks, projects, setProjects, sharedTask, setSharedTask, updateTask, deleteTask, deleteProject, updateProject, sharedProject, setSharedProject,createTask, showTaskForm, setShowTaskForm, getUserInfo, user, setUser, createProject, searchTerm, setSearchTerm, showProjectForm, setShowProjectForm, error, setError}}>
+        <AppContext.Provider value={{succesMessage, setSuccesMessage ,uploadResource, users, setUsers, usersTasks, setUsersTasks, projects, setProjects, sharedTask, setSharedTask, updateTask, deleteTask, deleteProject, updateProject, sharedProject, setSharedProject,createTask, showTaskForm, setShowTaskForm, getUserInfo, user, setUser, createProject, searchTerm, setSearchTerm, showProjectForm, setShowProjectForm, error, setError}}>
             {loading && <Loader/>}
             {children}
         </AppContext.Provider>

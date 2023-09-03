@@ -85,17 +85,26 @@ function Projectform() {
         } catch (e) {
             const error = e  as AxiosError;
             alert(error);
+            return
         }
 
-        setMiniLoading(false);
+        setTimeout(() => {
+            setShowProjectForm(false)
+            setMiniLoading(false);
+            setSharedProject(undefined);
+        }, 1500);
     },
 });
 
 const deleteHandler = async() =>{
     setMiniLoading(true);
     const result = await deleteProject(sharedProject.id)
-    setShowProjectForm(false)
-    setMiniLoading(false);
+    
+    setTimeout(() => {
+        setShowProjectForm(false)
+        setMiniLoading(false);
+        setSharedProject(undefined);
+    }, 1500);
 
     return result;
 }

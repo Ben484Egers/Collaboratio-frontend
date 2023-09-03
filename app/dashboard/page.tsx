@@ -23,9 +23,31 @@ export default function dashboard() {
   const [projects, setProjects] = useState<Project[]>();
   const [tasks, setTasks] = useState<Task[]>();
   const [username, setUsername] = useState<string>(undefined);
-  const [miniLoader, setMiniLoader] = useState<boolean>(false);
 
   const router = useRouter();
+
+  //Get initial data when component mounts
+  useEffect(() => {
+    setMiddleware('auth');
+    
+    const tk = localStorage.getItem("Collab-app");
+    let headers = {
+    'X-Requested-With': 'XMLHttpRequest',
+    'Content-type': 'application/json',
+    'Authorization': `Bearer ${tk}`
+    };
+
+    getTasksOfUser(headers);
+    getProjects(headers);
+  }, []);
+  
+  //If user is definded, setUsername
+  useEffect(() => {
+    if(user){
+      setUsername(user.name)
+    } 
+  }, [user])
+
 
   //Get tasks of loggedin user first
   const getTasksOfUser = async(headers) => {
@@ -53,29 +75,10 @@ export default function dashboard() {
   })
   }
 
-  useEffect(() => {
-    setMiddleware('auth');
-    
-    const tk = localStorage.getItem("Collab-app");
-    let headers = {
-    'X-Requested-With': 'XMLHttpRequest',
-    'Content-type': 'application/json',
-    'Authorization': `Bearer ${tk}`
-    };
-
-    getTasksOfUser(headers);
-    getProjects(headers);
-  }, []);
-
-  //If user is definded, setUsername
-  useEffect(() => {
-    if(user){
-      setUsername(user.name)
-    } 
-  }, [user])
-
-  const onRefresh = () => {
-    setMiniLoader(true);
+  const refresHandler = () => {
+    //Empty projects and tasks array, for beter ux when data comes back
+    setProjects(null);
+    setTasks(null);
     const tk = localStorage.getItem("Collab-app");
     let headers = {
       'X-Requested-With': 'XMLHttpRequest',
@@ -86,8 +89,6 @@ export default function dashboard() {
     getTasksOfUser(headers);
     getProjects(headers);
     getUserInfo();
-    
-    setMiniLoader(false);
   }
 
 
@@ -99,14 +100,15 @@ export default function dashboard() {
 
   return (
     <main className='dashboard container'>
-      {miniLoader && <MiniLoader/>}
     <SearchBar searchHandler={handleSubmit}/>
       <div className="welcome">
       <h2>Welcome, {!username ? '' : username}</h2>
-      <button onClick={onRefresh} className='btn-3 btn-fixed'>Refresh</button>
+      <button onClick={refresHandler} className='btn-3 btn-fixed'>Refresh</button>
       </div>
       <TasksContainer tasks={tasks}/>
       <ProjectsContainer projects={projects}/>
+
+      {/*Show forms for editing entity */}
       {showProjectForm && <Projectform/>}
       {showTaskForm && <Taskform projectId={undefined}/>}
     </main>

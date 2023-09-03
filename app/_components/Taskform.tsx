@@ -12,40 +12,55 @@ import DeleteButton from './DeleteButton';
 import { User } from '../_types/User';
 
 
-function Taskform({projectId}) {
+function Taskform({projectId}: {projectId?:number}) {
     const {users, createTask, user, setShowTaskForm, deleteTask, setSharedTask, sharedTask, updateTask} = useContext(AppContext);
     const [miniLoading, setMiniLoading] = useState<boolean>(false);
     const [taskTakerId, setTaskTakerId] = useState<number>();
+    const [taskTakerName, setTaskTakerName] = useState<string>();
 
+    //Get id & name of task taker when component mounts (when updating)
+    //If sharedTask is defined.
     useEffect(() => {
         if(sharedTask){
+            let name = getNameOfTaskTaker(sharedTask.user_id);
+            setTaskTakerName(name);
             setTaskTakerId(sharedTask.user_id);
         }
     }, [sharedTask])
 
+
       //Change in user/tasktaker
     const onOptionChangeHandler = (event) => {
         const taskTakerName = event.target.value;
+        setTaskTakerName(taskTakerName);
         const taskTaker: User = getUserId(taskTakerName);
-        setTaskTakerId(taskTaker.id)
+        setTaskTakerId(taskTaker.id);
     }
+
+    //Gets a users Id, by name passed in.
     const getUserId = (name: string): User => {
         return users.find(user => user.name == name);
     }
+
+    //Gets name of a user, by id passed in.
+    const getNameOfTaskTaker = (id: number): string => {
+        let taskTaker = users.find(user => user.id == id);
+        return taskTaker.name;
+    }
     
+    //Initializing properties.
       let name:string = ''
       let deadline:string = ''
       let details:string = ''
       let pm_id:number
-      let project_id:number
       let completed
   
+    //If its updating, set properties of task to the ones of the sharedTask
     if(sharedTask !== undefined) {
       name = sharedTask.name,
       deadline = sharedTask.deadline,
       details = sharedTask.description,
       pm_id = sharedTask.assigned_by_id,
-      project_id = sharedTask.project_id,
       completed = sharedTask.completed
     }
     
@@ -76,7 +91,8 @@ function Taskform({projectId}) {
 
         let payload: Task = {
             name: values.name,
-            project_id: projectId ? projectId : project_id,
+            //projectId wil be passed in when creating, if undefined (when updating), use the one of the sharedTask.
+            project_id: projectId ? projectId : sharedTask.project_id,
             description: values.details,
             deadline: values.deadline,
             //User responsible
@@ -86,21 +102,21 @@ function Taskform({projectId}) {
             completed: taskCompleted,
         }
 
-        try {
-            if(sharedTask !== undefined)  {
-                payload = {...payload, id: sharedTask.id}
-                const response = await updateTask(payload);
-                setSharedTask(undefined);
-            } else {
-                const response = await createTask(payload);
-            }   
-            
-        } catch (e) {
-            const error = e  as AxiosError;
-            console.log(error.message);
+        //When updating
+        if(sharedTask !== undefined)  {
+            payload = {...payload, id: sharedTask.id}
+            const response = await updateTask(payload);
+        } else {
+            //When creating
+            const response = await createTask(payload);
         }
-        setMiniLoading(false);
-
+        
+        setTimeout(() => {
+            setShowTaskForm(false);
+            setMiniLoading(false);
+            setSharedTask(undefined);
+        }, 1500);
+          
     },
     });
 
@@ -108,8 +124,13 @@ function Taskform({projectId}) {
     const deleteHandler = async() =>{
         setMiniLoading(true);
         const result = await deleteTask(sharedTask.id)
-        setShowTaskForm(false)
-        setMiniLoading(false);
+
+        setTimeout(() => {
+            setShowTaskForm(false);
+            setMiniLoading(false);
+            setSharedTask(undefined);
+        }, 1500);
+
         return result;
 
     }
@@ -172,7 +193,7 @@ function Taskform({projectId}) {
                     <label htmlFor="taskTaker">Task Taker:</label>
                 <select onChange={onOptionChangeHandler} id='users'>
                     {users && users.map((entity, index) => {
-                        return <option  key={index}>
+                        return <option selected={entity.name == taskTakerName} key={index}>
                                     {entity.name}
                                 </option>
                     })}
