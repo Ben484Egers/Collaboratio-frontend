@@ -7,11 +7,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: var(--off-white);
     box-shadow: 5px 10px 15px rgba($color: #000000, $alpha: 0.3);
     z-index: 300;
     .heading{
         width: max-content;
         margin: 5px auto 10px;
+        color: var(--text-color);
     }
 
 
@@ -158,6 +160,10 @@ form{
     .container{
         position: relative;
 
+    }
+
+    .heading{
+        color: var(--text-color);
     }
 }
 
