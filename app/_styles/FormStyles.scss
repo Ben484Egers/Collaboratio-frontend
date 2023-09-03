@@ -13,7 +13,9 @@
     .heading{
         width: max-content;
         margin: 5px auto 10px;
-        color: var(--text-color);
+        h3{
+            color: var(--text-color) !important;
+        }
     }
 
 
@@ -163,7 +165,9 @@ form{
     }
 
     .heading{
-        color: var(--text-color);
+        h3{
+            color: var(--text-color) !important;
+        }
     }
 }
 
