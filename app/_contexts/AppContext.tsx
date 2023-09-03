@@ -47,7 +47,7 @@ export interface AppContextInterface {
 export const AppContext = createContext<Partial<AppContextInterface>>({});
 
 export default function AppProvider({children}) {
-    const {loading, setLoading,  setCheckAuth} = useContext(AuthContext);
+    const {loading, token,  setCheckAuth} = useContext(AuthContext);
     const [searchTerm, setSearchTerm] = useState<string | null>(null);
     const [showProjectForm, setShowProjectForm] = useState<boolean>(false);
     const [showTaskForm, setShowTaskForm] = useState<boolean>(false);
@@ -66,7 +66,14 @@ export default function AppProvider({children}) {
       getUserInfo()
       getUsers()
 
-    }, [])    
+    }, [])
+
+    //When a user has logged out/ a new user registers, refetch the users from DB.
+    useEffect(() => {
+      getUserInfo()
+      getUsers()
+
+    }, [token])    
 
     //Get user info
     const getUserInfo = async () => {
