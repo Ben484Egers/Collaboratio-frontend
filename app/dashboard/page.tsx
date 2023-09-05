@@ -37,10 +37,8 @@ export default function dashboard() {
     'Authorization': `Bearer ${tk}`
     };
 
-    if(loggedIn) {
-      getTasksOfUser(headers);
-      getProjects(headers);
-    }
+    getTasksOfUser(headers);
+    getProjects(headers);
   }, []);
   
   //If user is definded, setUsername
@@ -60,7 +58,7 @@ export default function dashboard() {
       // console.log(response.data)
   }).catch(error => {
     // console.log(error)
-    setError("Could not fetch tasks. Try again later...");
+    // setError("Could not fetch tasks. Try again later...");
   })
   }
 
@@ -73,7 +71,7 @@ export default function dashboard() {
       // console.log(response.data)
   }).catch(error => {
     // console.log(error)
-      setError("Could not fetch prokjects. Try again later...");
+      // setError("Could not fetch prokjects. Try again later...");
   })
   }
 
