@@ -61,14 +61,14 @@ export default function AppProvider({children}) {
     const [succesMessage, setSuccesMessage] = useState<string | undefined>();
     
     //Get all users, and loggedin user when layout first mounts.
-    //Its neccesary data for ownership etc..
+    //Its neccesary data for ownership of projects & tasks.
     useEffect(() => {
       getUserInfo()
       getUsers()
 
     }, [])
 
-    //When a user has logged out/ a new user registers, refetch the users from DB.
+    //When a user has logged out || a new user registers, refetch the users from DB.
     useEffect(() => {
       getUserInfo()
       getUsers()
@@ -130,7 +130,7 @@ export default function AppProvider({children}) {
           return response.data;
         }).catch( error => {
           notifyError("Could not create project. Check ur fields constraints. 🚩🚨")
-          console.log(error);
+          // console.log(error);
         })
       }
 
@@ -269,6 +269,7 @@ useEffect(() => {
 //Toastify
 const timer = 5000
 
+  //Succes notification
   const notify = (succesMessage: string) => {
     toast.success( succesMessage, {
       position: "top-right",
@@ -283,6 +284,7 @@ const timer = 5000
     setSuccesMessage(undefined)
   }
 
+  //Error notification
   const notifyError = (errorMessage: string) => {
     toast.error(errorMessage, {
       position: "top-center",

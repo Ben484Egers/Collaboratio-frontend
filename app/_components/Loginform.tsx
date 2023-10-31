@@ -27,32 +27,32 @@ export default function Loginform() {
 //   if(loading) return <>Loading ....</>
 
 
-  //Formik Logic
-  const formik = useFormik({
-    initialValues: {
-        email: '',
-        password: '',
-    },
+    //Formik Logic
+    const formik = useFormik({
+        initialValues: {
+            email: '',
+            password: '',
+        },
 
-    //Validate form
-    validationSchema: Yup.object({
-        email: Yup.string().email("Invalid email").required("*Email is Required"),
-        password: Yup.string().required("*Please enter your password"),
-    }),
+        //Validate form
+        validationSchema: Yup.object({
+            email: Yup.string().email("Invalid email").required("*Email is Required"),
+            password: Yup.string().required("*Please enter your password"),
+        }),
     
-    onSubmit: async (values) => {
-        const payLoad: User = {
-            email: values.email,
-            password: values.password
-        }        
+        onSubmit: async (values) => {
+            const payLoad: User = {
+                email: values.email,
+                password: values.password
+            }        
 
-        const response = await loginHandler(JSON.stringify(payLoad)).catch(error => {
-            setError("Invalid credentials.., Please try again");
-            setLoading(false);
+            const response = await loginHandler(JSON.stringify(payLoad)).catch(error => {
+                setError("Invalid credentials.., Please try again");
+                setLoading(false);
 
-        });
+            });
 
-    },
+        },
 
     });
 

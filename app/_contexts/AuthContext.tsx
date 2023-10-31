@@ -34,7 +34,7 @@ export default function AuthProvider({children}) {
 
     // const csrf = () => axios.get(`${process.env.API_URL}sanctum/csrf-cookie`);
   
-    //Wil start up on loading screen, to do checks
+    //Wil start up on loading screen, to do auth checks
     //Look for token, if found, setToken,
     //If there is no token, stop loading en confirm that user is logged out 
     useEffect(() => {
@@ -45,7 +45,7 @@ export default function AuthProvider({children}) {
         setCheckAuth(true);      
       }
   
-      //If token is not found, confirm user is logged out, finished checking authentication en stop loadingscreen.
+      //If token is not found, confirm user is logged out, stop checking authentication en stop loadingscreen.
       if (tokenFromLocalStorage === null || tokenFromLocalStorage == "undefined" || tokenFromLocalStorage == undefined || tokenFromLocalStorage == '') {
           setLoggedIn(false);
           setAuthCheckDone(true);

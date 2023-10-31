@@ -45,7 +45,7 @@ export default function page({params}) {
     setCompleted(taskData && taskData.completed);
   }, [projectId])
 
-  //Filter out project manager when users are defined.
+  //Filter out project manager when users are fetched.
   //Gets Id from the task which is fetched.
   useEffect(() => {
     if(assignedById && users) {

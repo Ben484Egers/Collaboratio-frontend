@@ -13,8 +13,8 @@ export default function Registerform() {
     const {registerHandler, setLoading} = useContext(AuthContext);
     const {setError} = useContext(AppContext);
 
-//Formik Logic
-const formik = useFormik({
+    //Formik Logic
+    const formik = useFormik({
         initialValues: {
             name: '',
             email: '',
@@ -22,29 +22,29 @@ const formik = useFormik({
             password_confirmation: '',
         },
         
-    //Validate form
-    validationSchema: Yup.object({
-        name: Yup.string().min(4, "Name must be a minimum of 4 characters long").required("*Fullname is Required"),
-        email: Yup.string().email("Invalid email").required("*Email is Required"),
-        password: Yup.string().required("*Please enter your password").min(8, 'Password should be at least 8 characters long.'),
-        password_confirmation: Yup.string().required("*Please retype your password").oneOf([Yup.ref('password')], 'Passwords do not match.')
-    }),
+        //Validate form
+        validationSchema: Yup.object({
+            name: Yup.string().min(4, "Name must be a minimum of 4 characters long").required("*Fullname is Required"),
+            email: Yup.string().email("Invalid email").required("*Email is Required"),
+            password: Yup.string().required("*Please enter your password").min(8, 'Password should be at least 8 characters long.'),
+            password_confirmation: Yup.string().required("*Please retype your password").oneOf([Yup.ref('password')], 'Passwords do not match.')
+        }),
     
-    onSubmit: async (values) => {
-        
-        const payLoad: User = {
-            name: values.name,
-            email: values.email,
-            password: values.password,
-            password_confirmation: values.password_confirmation
+        onSubmit: async (values) => {
+            
+            const payLoad: User = {
+                name: values.name,
+                email: values.email,
+                password: values.password,
+                password_confirmation: values.password_confirmation
+            }
+
+            const response = registerHandler(payLoad).catch( (error) => {
+                setError("Something went wrong.., Please try again")
+                setLoading(false);
+
+            })
         }
-
-        const response = registerHandler(payLoad).catch( (error) => {
-            setError("Something went wrong.., Please try again")
-            setLoading(false);
-
-        })
-    }
 
     });
     

@@ -49,7 +49,7 @@ export default function dashboard() {
   }, [user])
 
 
-  //Get tasks of loggedin user first
+  //Get tasks of loggedin user
   const getTasksOfUser = async(headers) => {
     axios.get(`${process.env.API_URL}api/tasks`, {
       headers: headers
